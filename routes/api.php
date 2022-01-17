@@ -17,3 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::name('user')
+    ->prefix('user')
+    ->group(__DIR__ . '/UserRoute.php');
+
+Route::name('admin')
+    ->prefix('admin')
+    ->group(__DIR__ . '/AdminRoute.php');
+
+Route::name('post')
+    ->prefix('post')
+    ->group(__DIR__ . '/PostRoute.php');
