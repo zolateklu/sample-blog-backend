@@ -26,6 +26,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
+        $accessToken = $user->createToken('authToken')->accessToken;
+        return response()->json(['user' => $user, 'access_token' => $accessToken], 200);
     }
     public function login(Request $request)
     {
@@ -33,7 +35,14 @@ class UserController extends Controller
         $password = $request->input('password');
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = User::select('users.*')->find(auth()->user()->id);
-            return response()->json($user);
+            $accessToken = $user->createToken('authToken')->accessToken;
+            return response()->json(
+                [
+                    'user' => $user,
+                    'token' => $accessToken
+                ],
+                200
+            );
         }
         return response()->json(['error' => 'Unauthorized'], 401);
     }
